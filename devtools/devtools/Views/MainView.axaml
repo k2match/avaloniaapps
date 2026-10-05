@@ -1,18 +1,92 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="using:devtools.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="devtools.Views.MainView"
-             x:DataType="vm:MainViewModel">
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainViewModel />
-    </Design.DataContext>
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			xmlns:vm="using:devtools.ViewModels"
+			mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			x:Class="devtools.Views.MainView"
+			x:DataType="vm:MainViewModel">
 
-    <TextBox Text="{Binding Greeting}"
-             HorizontalAlignment="Center"
-             VerticalAlignment="Center" />
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+		to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:MainViewModel />
+	</Design.DataContext>
+
+<!--
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<MergeResourceInclude Source="/Assets/Style.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+-->
+	<UserControl.Styles>
+		<Style Selector="RadioButton.ColorRadioButton">
+			<Setter Property="Margin" Value="6,2"/>
+			<Setter Property="Padding" Value="4"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate>
+						<Border Margin="1" BorderThickness="1" BorderBrush="#FF707070" Padding="2">
+							<Border.Background>
+								<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+									<GradientStop Color="#F3F3F3" Offset="0"/>
+									<GradientStop Color="#EBEBEB" Offset="0.5"/>
+									<GradientStop Color="#DDDDDD" Offset="0.5"/>
+									<GradientStop Color="#CDCDCD" Offset="1"/>
+								</LinearGradientBrush>
+							</Border.Background>
+							<TextBlock x:Name="TxtContent"
+										HorizontalAlignment="Center"
+										VerticalAlignment="Center"
+										Text="{TemplateBinding Property=Content}"
+										Foreground="Black"
+										FontSize="{TemplateBinding FontSize}"
+										FontWeight="Bold"/>
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+
+			<Style Selector="^:checked">
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate>
+							<Border Margin="1" BorderThickness="1" BorderBrush="#FF707070" Padding="2">
+								<Border.Background>
+									<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+										<GradientStop Color="#8DFF8D" Offset="0"/>
+										<GradientStop Color="#DDFFDD" Offset="0.5"/>
+										<GradientStop Color="#EBFFEB" Offset="0.5"/>
+										<GradientStop Color="#F3FFF3" Offset="1"/>
+									</LinearGradientBrush>
+								</Border.Background>
+								<TextBlock x:Name="TxtContent"
+											HorizontalAlignment="Center"
+											VerticalAlignment="Center"
+											Text="{TemplateBinding Property=Content}"
+											Foreground="Black"
+											FontSize="{TemplateBinding FontSize}"
+											FontWeight="Bold"/>
+							</Border>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+		</Style>
+	</UserControl.Styles>
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<StackPanel>
+			<RadioButton Width="100" GroupName="Function" Classes="ColorRadioButton" Content="CALC" IsChecked="True" />
+			<RadioButton Width="100" GroupName="Function" Classes="ColorRadioButton" Content="PASSWORD" />
+		</StackPanel>
+	</Grid>
 </UserControl>
