@@ -1,0 +1,114 @@
+<Window
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:vm="using:k2audio.ViewModels"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	d:DesignWidth="800"
+	d:DesignHeight="450"
+	x:Class="k2audio.Views.MainWindow"
+	x:DataType="vm:MainViewModel"
+	Icon="/Assets/avalonia-logo.ico"
+	Title="k2audio">
+
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+			to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:MainViewModel />
+	</Design.DataContext>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<Menu Grid.Row="0">
+			<MenuItem Header="ファイル(_F)">
+				<MenuItem Header="設定(_C)" Command="{Binding Path=ConfigureCommand}" />
+				<Separator />
+				<MenuItem Header="新しいカタログ(_N)" Command="{Binding Path=CatalogNewCommand}" />
+				<MenuItem Header="カタログを開く(_O)" Command="{Binding Path=CatalogOpenCommand}" />
+				<Separator />
+				<MenuItem Header="終了(_Q)" Command="{Binding Path=QuitCommand}" />
+			</MenuItem>
+		</Menu>
+
+		<Grid Grid.Row="1">
+			<Grid.RowDefinitions>
+				<RowDefinition />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+
+			<!-- ボタン -->
+			<StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+				<Button Command="{Binding Path=ConfigureCommand}">
+					<Image Source="/Assets/configure.png" Height="28" Width="28" />
+				</Button>
+				<Button Command="{Binding Path=PlayCommand}">
+					<Image Source="/Assets/play.png" Height="28" Width="28" />
+				</Button>
+				<Button Command="{Binding Path=StopCommand}">
+					<Image Source="/Assets/stop.png" Height="28" Width="28" />
+				</Button>
+				<Button Command="{Binding Path=PauseCommand}">
+					<Image Source="/Assets/pause.png" Height="28" Width="28" />
+				</Button>
+			</StackPanel>
+
+			<!-- シークバー -->
+			<StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+				<Slider x:Name="_playPosition"
+						Orientation="Horizontal" Minimum="0" Maximum="100"
+						Value="{Binding Path=Position, Mode=OneWay}"
+						PointerCaptureLost="Position_PointerCaptureLost" />
+				<Label Content="{Binding Path=CurrentTime, Mode=OneWay}" />
+			</StackPanel>
+
+			<!-- タグ情報 -->
+			<StackPanel Grid.Row="1" Grid.Column="0"  Orientation="Horizontal">
+				<Label Content="{Binding Path=TrackSummary, Mode=OneWay}" />
+			</StackPanel>
+
+			<!-- 音量 -->
+			<Slider Grid.Row="1" Grid.Column="1"
+					Orientation="Horizontal" Minimum="0" Maximum="100"
+					Value="{Binding Path=Volume, Mode=OneWay}"
+					ValueChanged="Volume_ValueChanged" />
+
+		</Grid>
+
+		<Grid Grid.Row="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="200" MinWidth="100" MaxWidth="400" />
+				<ColumnDefinition Width="4" />
+				<ColumnDefinition Width="*" MinWidth="200" />
+			</Grid.ColumnDefinitions>
+
+			<!-- ナビゲーター -->
+			<Border Grid.Column="0" Background="LightBlue">
+				<TextBlock Text="Sidebar (100-400px)" Margin="8" />
+			</Border>
+
+			<GridSplitter Grid.Column="1" Background="Gray" ResizeDirection="Columns" />
+
+			<!-- ファイルリスト -->
+			<TableView Grid.Column="2" ItemsSource="{Binding Path=Files}" SelectedIndex="{Binding Path=SelectedIndex}">
+				<TableView.Columns>
+					<TableViewColumn x:Name="_colFileName" Header="FileName" Binding="{Binding Path=FileName}" Width="200"/>
+					<TableViewColumn x:Name="_colArtist" Header="Artist" Binding="{Binding Path=Tag.Artist}" Width="100"/>
+					<TableViewColumn x:Name="_colAlbum" Header="Album" Binding="{Binding Path=Tag.Album}" Width="100"/>
+					<TableViewColumn x:Name="_colTitle" Header="Title" Binding="{Binding Path=Tag.Title}" Width="100"/>
+					<TableViewColumn x:Name="_colTime" Header="Time" Binding="{Binding Path=Tag.Time}" Width="100"/>
+				</TableView.Columns>
+			</TableView>
+		</Grid>
+	</Grid>
+
+</Window>
