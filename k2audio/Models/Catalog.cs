@@ -350,14 +350,16 @@ internal class Catalog : IDisposable
 			while (reader.Read())
 			{
 				string path = System.IO.Path.Combine(this.BaseDirectory, reader.GetString(oDirPath), reader.GetString(oName));
-				System.Console.WriteLine(@"{path}");
+				System.Console.WriteLine($"{path}");
 
-				//AudioFile af = new(this, reader.GetInt32(oID), reader.GetInt32(oDir), path, reader.GetInt64(oSize), reader.GetInt64(oLastWrite));
-				//if (!reader.IsDBNull(oGenre)) af.Tag.Genre = reader.GetString(oGenre);
-				//if (!reader.IsDBNull(oArtist)) af.Tag.Artist = reader.GetString(oArtist);
-				//if (!reader.IsDBNull(oAlbum)) af.Tag.Album = reader.GetString(oAlbum);
-				//if (!reader.IsDBNull(oTitle)) af.Tag.Title = reader.GetString(oTitle);
-				//if (!reader.IsDBNull(oTime)) af.Tag.Seconds = reader.GetInt32(oTime);
+				AudioFile af = new(this, reader.GetInt32(oID), reader.GetInt32(oDir), path, reader.GetInt64(oSize), reader.GetInt64(oLastWrite));
+				if (!reader.IsDBNull(oGenre)) af.Tag.Genre = reader.GetString(oGenre);
+				if (!reader.IsDBNull(oArtist)) af.Tag.Artist = reader.GetString(oArtist);
+				if (!reader.IsDBNull(oAlbum)) af.Tag.Album = reader.GetString(oAlbum);
+				if (!reader.IsDBNull(oTitle)) af.Tag.Title = reader.GetString(oTitle);
+				if (!reader.IsDBNull(oTime)) af.Tag.Seconds = reader.GetInt32(oTime);
+
+				files.Add(af);
 			}
 		}
 
