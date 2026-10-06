@@ -80,13 +80,22 @@
 
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="200" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 
 		<StackPanel>
-			<RadioButton Width="100" GroupName="Function" Classes="ColorRadioButton" Content="CALC" IsChecked="True" />
-			<RadioButton Width="100" GroupName="Function" Classes="ColorRadioButton" Content="PASSWORD" />
+			<Expander HorizontalAlignment="Stretch" Header="算術" IsExpanded="True">
+				<StackPanel>
+					<RadioButton HorizontalAlignment="Stretch" GroupName="Function" Classes="ColorRadioButton" Content="計算" IsChecked="True" />
+					<RadioButton HorizontalAlignment="Stretch" GroupName="Function" Classes="ColorRadioButton" Content="基数変換" />
+				</StackPanel>
+			</Expander>
+			<Expander HorizontalAlignment="Stretch" Header="生成" IsExpanded="False">
+				<StackPanel>
+					<RadioButton HorizontalAlignment="Stretch" GroupName="Function" Classes="ColorRadioButton" Content="PASSWORD" />
+				</StackPanel>
+			</Expander>
 		</StackPanel>
 	</Grid>
 </UserControl>
