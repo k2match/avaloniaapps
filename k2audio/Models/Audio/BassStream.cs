@@ -14,7 +14,7 @@ internal class BassStream : IDisposable
 		_stream = CreateStream(path);
 		if (_stream == 0) {
 			string msg = $"Bass.CreateStream Error: {Bass.LastError}";
-			System.Console.WriteLine(msg);
+			System.Console.WriteLine(msg);		// TODO: 削除
 			throw new Exception(msg);
 		}
 	}
@@ -52,7 +52,7 @@ internal class BassStream : IDisposable
 			if (!Bass.ChannelPlay(_stream, false))
 			{
 				string msg = $"Bass.ChannelPlay() Error: {Bass.LastError}";
-				System.Console.WriteLine(msg);
+				System.Console.WriteLine(msg);		// TODO: 削除
 				throw new Exception(msg);
 			}
 		}
@@ -65,7 +65,7 @@ internal class BassStream : IDisposable
 			if (!Bass.ChannelStop(_stream))
 			{
 				string msg = $"Bass.ChannelStop() Error: {Bass.LastError}";
-				System.Console.WriteLine(msg);
+				System.Console.WriteLine(msg);		// TODO: 削除
 				throw new Exception(msg);
 			}
 		}
@@ -80,7 +80,7 @@ internal class BassStream : IDisposable
 			if (!Bass.ChannelPause(_stream))
 			{
 				string msg = $"Bass.ChannelPause() Error: {Bass.LastError}";
-				System.Console.WriteLine(msg);
+				System.Console.WriteLine(msg);		// TODO: 削除
 				throw new Exception(msg);
 			}
 		}
@@ -93,7 +93,7 @@ internal class BassStream : IDisposable
 			if (!Bass.ChannelPlay(_stream, false))
 			{
 				string msg = $"Bass.ChannelPlay() Error: {Bass.LastError}";
-				System.Console.WriteLine(msg);
+				System.Console.WriteLine(msg);		// TODO: 削除
 				throw new Exception(msg);
 			}
 		}
@@ -112,7 +112,7 @@ internal class BassStream : IDisposable
 				else
 				{
 					string msg = $"Bass.ChannelGetAttribute() Error: {Bass.LastError}";
-					System.Console.WriteLine(msg);
+					System.Console.WriteLine(msg);		// TODO: 削除
 					throw new Exception(msg);
 				}
 			}
@@ -126,7 +126,7 @@ internal class BassStream : IDisposable
 				if (!Bass.ChannelSetAttribute(_stream, ChannelAttribute.Volume, value))
 				{
 					string msg = $"Bass.ChannelSetAttribute() Error: {Bass.LastError}";
-					System.Console.WriteLine(msg);
+					System.Console.WriteLine(msg);		// TODO: 削除
 					throw new Exception(msg);
 				}
 			}
@@ -172,7 +172,7 @@ internal class BassStream : IDisposable
 			if (!Bass.ChannelSetPosition(_stream, targetBytes, PositionFlags.Bytes))
 			{
 				string msg = $"Bass.ChannelSetPosition() Error: {Bass.LastError}";
-				System.Console.WriteLine(msg);
+				System.Console.WriteLine(msg);		// TODO: 削除
 				throw new Exception(msg);
 			}
 			//		long	bytes = (long)(position * Bass.ChannelGetAttribute(_stream, ChannelAttribute.BytesPerSecond));
@@ -215,7 +215,7 @@ internal class BassStream : IDisposable
 		if (!Bass.Init(-1, 44100, DeviceInitFlags.Default, IntPtr.Zero))
 		{
 			string msg = $"Bass.Init() Error: {Bass.LastError}";
-			System.Console.WriteLine(msg);
+			System.Console.WriteLine(msg);		// TODO: 削除
 			throw new Exception(msg);
 		}
 

@@ -23,8 +23,8 @@ public partial class MainViewModel : ViewModelBase
 
 	public void Initialize()
 	{
-		System.Console.WriteLine("Initialize");
-		System.Console.WriteLine("Configure: " + ThisApp.Instance.ConfigureDirectory);
+		System.Console.WriteLine("Initialize");		// TODO: 削除
+		System.Console.WriteLine("Configure: " + ThisApp.Instance.ConfigureDirectory);		// TODO: 削除
 
 		BassStream.Initialize();
 
@@ -44,7 +44,7 @@ public partial class MainViewModel : ViewModelBase
 	{
 		// App.axaml.cs で終了時に呼び出されるようにセット
 
-		System.Console.WriteLine("Terminate");
+		System.Console.WriteLine("Terminate");		// TODO: 削除
 
 		AudioPlayer.Instance.Stop();
 		BassStream.Free();
@@ -54,18 +54,31 @@ public partial class MainViewModel : ViewModelBase
 
 	internal void SaveState(ThisState state)
 	{
-		System.Console.WriteLine("SaveState");
-
-		// CatalogList
-		state.Catalogs.Clear();
-		foreach(Catalog catalog in this.CatalogList){
-			state.Catalogs.Add(catalog.Path);
+		System.Console.WriteLine("SaveState");		// TODO: 削除
+		if(state is null){
+			System.Console.WriteLine("  state is null!");
+		}else if(state.Catalogs is null){
+			System.Console.WriteLine("  state.Catalogs is null!");
+		}else{
+			System.Console.WriteLine("  not null!");
 		}
+
+		// Volume
+		state?.Volume = this.Volume;
+
+		// TODO: CatalogList
+		//state.Catalogs.Clear();
+		//foreach(Catalog catalog in this.CatalogList){
+		//	state.Catalogs.Add(catalog.Path);
+		//}
 	}
 
 	internal void RestoreState(ThisState state)
 	{
-		System.Console.WriteLine("RestoreState");
+		System.Console.WriteLine("RestoreState");		// TODO: 削除
+
+		// Volume
+		this.Volume = state.Volume;
 
 		// TODO:
 	}
@@ -97,7 +110,9 @@ public partial class MainViewModel : ViewModelBase
 	{
 		// 開く
 		_catalog = catalog;
-		this.SetFiles(_catalog.GetFiles());
+		this.SetFiles(_catalog.AllFiles);
+
+		foreach (string s in _catalog.AllFiles.GetArtists()) System.Console.WriteLine($"artist [{s}]");		// TODO: 削除
 
 		// リストの先頭に追加
 		this.CatalogList.Insert(0, catalog);
@@ -174,7 +189,7 @@ public partial class MainViewModel : ViewModelBase
 			cnt = 0;
 			idx = -1;
 		}
-		System.Console.WriteLine($"Play Audio: {file.FileName} ({idx + 1}/{cnt})");
+		System.Console.WriteLine($"Play Audio: {file.FileName} ({idx + 1}/{cnt})");		// TODO: 削除
 
 		if(file is not null && file.Tag is not null){
 			this.TrackSummary = $"{file.Tag.Artist} - {file.Tag.Album} - {file.Tag.Title}";
@@ -339,7 +354,7 @@ public partial class MainViewModel : ViewModelBase
 	[ObservableProperty]
 	internal partial double Position { get; private set; } = 0.0;
 	[ObservableProperty]
-	internal partial float Volume { get; private set; } = 20.0f;
+	internal partial float Volume { get; private set; } = 0;
 	[ObservableProperty]
 	internal partial string CurrentTime { get; private set; } = string.Empty;
 
@@ -348,7 +363,7 @@ public partial class MainViewModel : ViewModelBase
 	[RelayCommand]
 	private void Quit()
 	{
-		System.Console.WriteLine("Quit");
+		System.Console.WriteLine("Quit");	// TODO: 削除
 
 		// 閉じるメッセージを送信
 		WeakReferenceMessenger.Default.Send(new CloseWindowMessage());
@@ -357,7 +372,7 @@ public partial class MainViewModel : ViewModelBase
 	[RelayCommand]
 	private void Configure()
 	{
-		System.Console.WriteLine("Configure");
+		System.Console.WriteLine("Configure");		// TODO: 削除
 
 		// 設定ウィンドウオープンメッセージ
 		WeakReferenceMessenger.Default.Send(new OpenConfigureWindowMessage());
@@ -369,9 +384,9 @@ public partial class MainViewModel : ViewModelBase
 		AudioFile? file = this.GetSelectedFile();
 		if (file is not null){
 			this.PlayAudio(file);
-			System.Console.WriteLine($"Play {file.Path}");
+			System.Console.WriteLine($"Play {file.Path}");		// TODO: 削除
 		}else{
-			System.Console.WriteLine("No Selected File");
+			System.Console.WriteLine("No Selected File");		// TODO: 削除
 		}
 	}
 	[ObservableProperty]
@@ -385,7 +400,7 @@ public partial class MainViewModel : ViewModelBase
 	[RelayCommand(CanExecute = nameof(CanStop))]
 	private void Stop()
 	{
-		System.Console.WriteLine("Stop");
+		System.Console.WriteLine("Stop");		// TODO: 削除
 		this.StopAudio();
 	}
 	[ObservableProperty]
@@ -399,7 +414,7 @@ public partial class MainViewModel : ViewModelBase
 	[RelayCommand(CanExecute = nameof(CanPause))]
 	private void Pause()
 	{
-		System.Console.WriteLine("Pause");
+		System.Console.WriteLine("Pause");		// TODO: 削除
 		this.PauseAudio();
 	}
 	[ObservableProperty]
@@ -413,7 +428,7 @@ public partial class MainViewModel : ViewModelBase
 	[RelayCommand]
 	private void CatalogNew()
 	{
-		System.Console.WriteLine("CatalogNew");
+		System.Console.WriteLine("CatalogNew");		// TODO: 削除
 
 		this.CreateCatalog();
 	}
@@ -421,7 +436,7 @@ public partial class MainViewModel : ViewModelBase
 	[RelayCommand]
 	private void CatalogOpen()
 	{
-		System.Console.WriteLine("CatalogOpen");
+		System.Console.WriteLine("CatalogOpen");		// TODO: 削除
 
 		this.OpenCatalog();
 	}

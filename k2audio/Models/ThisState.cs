@@ -16,6 +16,7 @@ internal class ThisState : StateBase
 
 	//========================================
 	// プロパティ
+	public float Volume = 20.0f;
 	public List<string> Catalogs = new();
 
 	//========================================

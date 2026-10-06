@@ -42,7 +42,7 @@ public partial class MainWindow : Window
 	{
 		base.OnOpened(e);
 
-		System.Console.WriteLine("MainWindow OnOpened");
+		System.Console.WriteLine("MainWindow OnOpened");		// TODO: 削除
 
 		_vm = this.DataContext as MainViewModel;
 
@@ -65,7 +65,7 @@ public partial class MainWindow : Window
 	{
 		base.OnClosing(e);
 
-		System.Console.WriteLine("MainWindow OnClosing");
+		System.Console.WriteLine("MainWindow OnClosing");		// TODO: 削除
 
 		// 状態を保存
 		ThisState state = ThisApp.Instance.State;
@@ -80,7 +80,7 @@ public partial class MainWindow : Window
 
 	private void Position_PointerCaptureLost(object? sender, PointerCaptureLostEventArgs e)
 	{
-		System.Console.WriteLine($"Slider PointerCaptureLost: {_playPosition.Value}");
+		System.Console.WriteLine($"Slider PointerCaptureLost: {_playPosition.Value}");		// TODO: 削除
 
 		_vm?.Seek(_playPosition.Value);
 	}
@@ -89,20 +89,10 @@ public partial class MainWindow : Window
 	{
 		// e.OldValue gives you the previous number
 		// e.NewValue gives you the current number
-		double newValue = e.NewValue;
+		float newValue = (float)e.NewValue;
 
-		System.Console.WriteLine($"Volume Changed: {newValue}");
+		System.Console.WriteLine($"Volume Changed: {newValue}");		// TODO: 削除
+
+		_vm?.SetVolume(newValue);
 	}
-
-	/*private void Slider_ValueChanged(object? sender, RangeBaseValueChangedEventArgs e)
-	{
-		if (_vm is null || _vm.IsPositionUpdating) return;
-
-		// e.OldValue gives you the previous number
-		// e.NewValue gives you the current number
-		double newValue = e.NewValue;
-
-		System.Console.WriteLine($"Slider value changed to: {newValue}");
-		//_vm?.Seek(newValue);
-	}*/
 }

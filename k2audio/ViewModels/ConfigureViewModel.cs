@@ -16,7 +16,7 @@ public partial class ConfigureViewModel : ViewModelBase
 
 	public void Initialize()
 	{
-		System.Console.WriteLine("Initialize Configure");
+		System.Console.WriteLine("Initialize Configure");	// TODO: 削除
 	}
 
 	public void Terminate()
@@ -31,7 +31,7 @@ public partial class ConfigureViewModel : ViewModelBase
 	[RelayCommand]
 	private void Close()
 	{
-		System.Console.WriteLine("Close");
+		System.Console.WriteLine("Close");	// TODO: 削除
 
 		// 閉じるメッセージを送信
 		WeakReferenceMessenger.Default.Send(new CloseWindowMessage());

@@ -55,6 +55,15 @@ internal class Catalog : IDisposable
 	public string Path { get; }
 	public string Name { get; }
 	public string BaseDirectory { get; private set; }
+	private AudioFileCollection? _allFiles = null;
+	public AudioFileCollection AllFiles
+	{
+		get
+		{
+			if (_allFiles is null) _allFiles = GetFiles(null);
+			return _allFiles;
+		}
+	}
 	private SqliteConnection? _conn = null;
 	private SqliteConnection Connection
 	{
@@ -62,17 +71,9 @@ internal class Catalog : IDisposable
 		{
 			if (_conn is not null) return _conn;
 			_conn = new SqliteConnection($"Data Source={this.Path}");
-			System.Console.WriteLine($"Connect DB {_conn.DataSource}");
 			_conn.Open();
 			return _conn;
 		}
-	}
-
-	//========================================
-	// ファイル取得
-	public AudioFileCollection GetFiles()
-	{
-		return GetFiles(null);
 	}
 
 	//========================================
@@ -350,7 +351,6 @@ internal class Catalog : IDisposable
 			while (reader.Read())
 			{
 				string path = System.IO.Path.Combine(this.BaseDirectory, reader.GetString(oDirPath), reader.GetString(oName));
-				System.Console.WriteLine($"{path}");
 
 				AudioFile af = new(this, reader.GetInt32(oID), reader.GetInt32(oDir), path, reader.GetInt64(oSize), reader.GetInt64(oLastWrite));
 				if (!reader.IsDBNull(oGenre)) af.Tag.Genre = reader.GetString(oGenre);
@@ -389,8 +389,6 @@ internal class Catalog : IDisposable
 		cmd.Parameters.AddWithValue("$Album", (object?)file.Tag.Album ?? DBNull.Value);
 		cmd.Parameters.AddWithValue("$Title", (object?)file.Tag.Title ?? DBNull.Value);
 		cmd.Parameters.AddWithValue("$Time", file.Tag.Seconds);
-
-		//System.Console.WriteLine(string.Format($"{file.Path} => {file.Directory},{file.FileName}  {file.Size},{file.LastWrite} {file.Tag.Genre},{file.Tag.Artist},{file.Tag.Album},{file.Tag.Title},{file.Tag.Seconds}"));
 
 		cmd.ExecuteNonQuery();
 	}

@@ -44,17 +44,10 @@ internal class AudioPlayer
 			_stream = new BassStream(file.Path);
 			_stream.Volume = (volume / 100);
 			_stream.Play();
-			//_reader = file.OpenReader();
-			//_reader = new AudioFileReader(file.Path);
-			//_reader.Volume = volume / 100;
-			//_output = new WaveOutEvent();
-			//_output.Init(_reader);
-			//_output.Volume = volume / 100;
-			System.Console.WriteLine($"Play: {file.Path} Volume: {_stream.Volume}");
-			//_output.Play();
+			System.Console.WriteLine($"Play: {file.Path} Volume: {_stream.Volume}");	// TODO: 削除
 		} catch (Exception ex) {
-			System.Console.WriteLine(ex.Message);
-			System.Console.WriteLine(ex.StackTrace);
+			System.Console.WriteLine(ex.Message);		// TODO: 削除
+			System.Console.WriteLine(ex.StackTrace);	// TODO: 削除
 			this.Stop();
 		}
 	}

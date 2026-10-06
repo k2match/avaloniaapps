@@ -5,10 +5,15 @@ using k2audio.Models;
 
 namespace k2audio.Models.Audio;
 
+using DirectoryFilenameDictionary = SortedList<AudioFileCollection.DirectoryFilenameKey, AudioFile>;
+
 internal class AudioFileCollection : ICollection<AudioFile>
 {
 	private SortedList<int, AudioFile> _files = [];
-	private SortedList<DirectoryFilenameKey, AudioFile> _filenameDictionary = [];
+	private DirectoryFilenameDictionary _filenameDictionary = [];
+	private SortedList<string, DirectoryFilenameDictionary>? _artistDictionary = null;
+	private SortedList<string, DirectoryFilenameDictionary>? _albumDictionary = null;
+	private SortedList<string, DirectoryFilenameDictionary>? _genreDictionary = null;
 
 	//========================================
 	// コンストラクタ
@@ -27,6 +32,100 @@ internal class AudioFileCollection : ICollection<AudioFile>
 	}
 
 	//========================================
+	// タグ
+	internal IList<string> GetArtists()
+	{
+		this.MakeTagDictionary();
+
+		List<string> artists = new();
+		if(_artistDictionary is not null){
+			artists.AddRange(_artistDictionary.Keys);
+		}
+		return artists;
+	}
+
+	internal IList<AudioFile>? SelectArtist(string argist)
+	{
+		this.MakeTagDictionary();
+
+		if (_artistDictionary is not null && _artistDictionary.TryGetValue(argist, out DirectoryFilenameDictionary? dic))
+		{
+			return dic.Values;
+		}
+		return null;
+	}
+
+	private void ClearTagDictionary()
+	{
+		_artistDictionary = null;
+		_albumDictionary = null;
+		_genreDictionary = null;
+	}
+
+	private void MakeTagDictionary()
+	{
+		if (_artistDictionary is null)
+		{
+			_artistDictionary = new();
+
+			foreach (AudioFile af in _files.Values)
+			{
+				if (string.IsNullOrEmpty(af.Tag.Artist) || af.Directory is null) continue;
+				if (_artistDictionary.TryGetValue(af.Tag.Artist, out DirectoryFilenameDictionary? dic))
+				{
+					dic.Add(new DirectoryFilenameKey((int)af.Directory, af.FileName), af);
+				}
+				else
+				{
+					DirectoryFilenameDictionary dicn = new();
+					dicn.Add(new DirectoryFilenameKey((int)af.Directory, af.FileName), af);
+					_artistDictionary.Add(af.Tag.Artist, dicn);
+				}
+			}
+		}
+
+		if (_albumDictionary is null)
+		{
+			_albumDictionary = new();
+
+			foreach (AudioFile af in _files.Values)
+			{
+				if (string.IsNullOrEmpty(af.Tag.Album) || af.Directory is null) continue;
+				if (_albumDictionary.TryGetValue(af.Tag.Album, out DirectoryFilenameDictionary? dic))
+				{
+					dic.Add(new DirectoryFilenameKey((int)af.Directory, af.FileName), af);
+				}
+				else
+				{
+					DirectoryFilenameDictionary dicn = new();
+					dicn.Add(new DirectoryFilenameKey((int)af.Directory, af.FileName), af);
+					_albumDictionary.Add(af.Tag.Album, dicn);
+				}
+			}
+		}
+
+		if(_genreDictionary is null)
+		{
+			_genreDictionary = new();
+
+			foreach (AudioFile af in _files.Values)
+			{
+				if (string.IsNullOrEmpty(af.Tag.Genre) || af.Directory is null) continue;
+				if (_genreDictionary.TryGetValue(af.Tag.Genre, out DirectoryFilenameDictionary? dic))
+				{
+					dic.Add(new DirectoryFilenameKey((int)af.Directory, af.FileName), af);
+				}
+				else
+				{
+					DirectoryFilenameDictionary dicn = new();
+					dicn.Add(new DirectoryFilenameKey((int)af.Directory, af.FileName), af);
+					_genreDictionary.Add(af.Tag.Genre, dicn);
+				}
+			}
+		}
+	}
+
+	//========================================
 	// ICollection
 	public void Add(AudioFile file)
 	{
@@ -34,11 +133,14 @@ internal class AudioFileCollection : ICollection<AudioFile>
 		{
 			_files.Add((int)file.ID, file);
 			_filenameDictionary.Add(new DirectoryFilenameKey((int)file.Directory, file.FileName), file);
+
+			this.ClearTagDictionary();
 		}
 	}
 	public void Clear()
 	{
 		_files.Clear();
+		this.ClearTagDictionary();
 	}
 	public bool Contains(AudioFile file)
 	{
@@ -62,7 +164,9 @@ internal class AudioFileCollection : ICollection<AudioFile>
 		if (file.ID is not null && file.Directory is not null)
 		{
 			_filenameDictionary.Remove(new DirectoryFilenameKey((int)file.Directory, file.FileName));
-			return _files.Remove((int)file.ID);
+			bool ret = _files.Remove((int)file.ID);
+			if (ret) this.ClearTagDictionary();
+			return ret;
 		}
 		return false;
 	}
