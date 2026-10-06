@@ -55,22 +55,16 @@ public partial class MainViewModel : ViewModelBase
 	internal void SaveState(ThisState state)
 	{
 		System.Console.WriteLine("SaveState");		// TODO: 削除
-		if(state is null){
-			System.Console.WriteLine("  state is null!");
-		}else if(state.Catalogs is null){
-			System.Console.WriteLine("  state.Catalogs is null!");
-		}else{
-			System.Console.WriteLine("  not null!");
-		}
 
 		// Volume
 		state?.Volume = this.Volume;
 
-		// TODO: CatalogList
-		//state.Catalogs.Clear();
-		//foreach(Catalog catalog in this.CatalogList){
-		//	state.Catalogs.Add(catalog.Path);
-		//}
+		// CatalogList
+		state?.Catalogs.Clear();
+		foreach (Catalog catalog in this.CatalogList)
+		{
+			state?.Catalogs.Add(catalog.Path);
+		}
 	}
 
 	internal void RestoreState(ThisState state)

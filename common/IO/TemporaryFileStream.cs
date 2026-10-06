@@ -67,23 +67,30 @@ public class TemporaryFileStream : FileStream
 	{
 		base.Close();
 		if(!string.IsNullOrEmpty(_tmpName) && !string.IsNullOrEmpty(_orgName)){
-			if(File.Exists(_orgName)){
+			if (File.Exists(_orgName))
+			{
 				// 属性をコピー
-				if(_keepAttribute) {
-					try{
-						FileInfo	org = new FileInfo(_orgName);
-						FileInfo	tmp = new FileInfo(_tmpName);
+				if (_keepAttribute)
+				{
+					try
+					{
+						FileInfo org = new FileInfo(_orgName);
+						FileInfo tmp = new FileInfo(_tmpName);
 						tmp.Attributes = org.Attributes;
-						tmp.CreationTime = org.CreationTime;
-					}catch(IOException){
+						//tmp.CreationTime = org.CreationTime;
+					}
+					catch (IOException)
+					{
 					}
 				}
 
 				// 上書き
-				string	backup = TemporaryFile.CreateTemporaryPath(Path.GetDirectoryName(_orgName));
+				string backup = TemporaryFile.CreateTemporaryPath(Path.GetDirectoryName(_orgName));
 				File.Replace(_tmpName, _orgName, backup);
 				File.Delete(backup);
-			}else{
+			}
+			else
+			{
 				File.Move(_tmpName, _orgName);
 			}
 			_tmpName = null;

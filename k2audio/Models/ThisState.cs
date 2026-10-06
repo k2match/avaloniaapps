@@ -16,8 +16,10 @@ internal class ThisState : StateBase
 
 	//========================================
 	// プロパティ
-	public float Volume = 20.0f;
-	public List<string> Catalogs = new();
+	[DataMember]
+	public float Volume { get; set; } = 20.0f;
+	[DataMember]
+	public List<string> Catalogs { get; set; } = new();
 
 	//========================================
 	// セーブ・ロード
