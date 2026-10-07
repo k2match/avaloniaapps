@@ -92,20 +92,34 @@
 			</Grid.ColumnDefinitions>
 
 			<!-- ナビゲーター -->
-			<Border Grid.Column="0" Background="LightBlue">
-				<TextBlock Text="Sidebar (100-400px)" Margin="8" />
-			</Border>
+			<Grid Grid.Column="0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="200" />
+				</Grid.RowDefinitions>
+
+				<ListBox Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+						ItemsSource="{Binding Path=CatalogList}" SelectionMode="Single">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding Path=Name}" />
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
 
 			<GridSplitter Grid.Column="1" Background="Gray" ResizeDirection="Columns" />
 
 			<!-- ファイルリスト -->
 			<TableView Grid.Column="2" ItemsSource="{Binding Path=Files}" SelectedIndex="{Binding Path=SelectedIndex}">
 				<TableView.Columns>
-					<TableViewColumn x:Name="_colFileName" Header="FileName" Binding="{Binding Path=FileName}" Width="200"/>
-					<TableViewColumn x:Name="_colArtist" Header="Artist" Binding="{Binding Path=Tag.Artist}" Width="100"/>
-					<TableViewColumn x:Name="_colAlbum" Header="Album" Binding="{Binding Path=Tag.Album}" Width="100"/>
-					<TableViewColumn x:Name="_colTitle" Header="Title" Binding="{Binding Path=Tag.Title}" Width="100"/>
-					<TableViewColumn x:Name="_colTime" Header="Time" Binding="{Binding Path=Tag.Time}" Width="100"/>
+					<TableViewColumn x:Name="_colPlaying" Header="FileName" Width="20" />
+					<TableViewColumn x:Name="_colFileName" Header="FileName" Binding="{Binding Path=FileName}" Width="200" />
+					<TableViewColumn x:Name="_colArtist" Header="Artist" Binding="{Binding Path=Tag.Artist}" Width="100" />
+					<TableViewColumn x:Name="_colAlbum" Header="Album" Binding="{Binding Path=Tag.Album}" Width="100" />
+					<TableViewColumn x:Name="_colTitle" Header="Title" Binding="{Binding Path=Tag.Title}" Width="100" />
+					<TableViewColumn x:Name="_colTime" Header="Time" Binding="{Binding Path=Tag.Time}" Width="100" />
+					<TableViewColumn x:Name="_colFavorite" Header="Favorite" Width="100" />
 				</TableView.Columns>
 			</TableView>
 		</Grid>

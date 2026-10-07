@@ -11,9 +11,9 @@ internal class AudioFileCollection : ICollection<AudioFile>
 {
 	private SortedList<int, AudioFile> _files = [];
 	private DirectoryFilenameDictionary _filenameDictionary = [];
-	private SortedList<string, DirectoryFilenameDictionary>? _artistDictionary = null;
-	private SortedList<string, DirectoryFilenameDictionary>? _albumDictionary = null;
-	private SortedList<string, DirectoryFilenameDictionary>? _genreDictionary = null;
+	private CatalogTagCollection? _artists = null;
+	private CatalogTagCollection? _albums = null;
+	private CatalogTagCollection? _genres = null;
 
 	//========================================
 	// コンストラクタ
@@ -21,6 +21,8 @@ internal class AudioFileCollection : ICollection<AudioFile>
 	{
 	}
 
+	//========================================
+	// 操作
 	public AudioFile? GetFile(int dirID, string filename)
 	{
 		if (_filenameDictionary.TryGetValue(new DirectoryFilenameKey(dirID, filename), out AudioFile? file))
@@ -33,93 +35,78 @@ internal class AudioFileCollection : ICollection<AudioFile>
 
 	//========================================
 	// タグ
-	internal IList<string> GetArtists()
+	internal CatalogTagCollection GetArtists()
 	{
-		this.MakeTagDictionary();
+		this.MakeTagCollection();
 
-		List<string> artists = new();
-		if(_artistDictionary is not null){
-			artists.AddRange(_artistDictionary.Keys);
-		}
-		return artists;
+		if (_artists is not null)
+			return _artists;
+		else
+			throw new ApplicationException("Artists is null.");
 	}
 
-	internal IList<AudioFile>? SelectArtist(string argist)
+	private void ClearTagCollection()
 	{
-		this.MakeTagDictionary();
+		_artists = null;
+		_albums = null;
+		_genres = null;
+	}
 
-		if (_artistDictionary is not null && _artistDictionary.TryGetValue(argist, out DirectoryFilenameDictionary? dic))
+	private void MakeTagCollection()
+	{
+		if (_artists is null)
 		{
-			return dic.Values;
-		}
-		return null;
-	}
-
-	private void ClearTagDictionary()
-	{
-		_artistDictionary = null;
-		_albumDictionary = null;
-		_genreDictionary = null;
-	}
-
-	private void MakeTagDictionary()
-	{
-		if (_artistDictionary is null)
-		{
-			_artistDictionary = new();
+			_artists = new();
 
 			foreach (AudioFile af in _files.Values)
 			{
 				if (string.IsNullOrEmpty(af.Tag.Artist) || af.Directory is null) continue;
-				if (_artistDictionary.TryGetValue(af.Tag.Artist, out DirectoryFilenameDictionary? dic))
+
+				if (_artists.TryGetValue(af.Tag.Artist, out CatalogTag tag))
 				{
-					dic.Add(new DirectoryFilenameKey((int)af.Directory, af.FileName), af);
+					tag.AddFile(af);
 				}
 				else
 				{
-					DirectoryFilenameDictionary dicn = new();
-					dicn.Add(new DirectoryFilenameKey((int)af.Directory, af.FileName), af);
-					_artistDictionary.Add(af.Tag.Artist, dicn);
+					_artists.Add(new CatalogTag(af.Tag.Artist, af));
 				}
 			}
 		}
 
-		if (_albumDictionary is null)
+		if(_albums is null)
 		{
-			_albumDictionary = new();
+			_albums = new();
 
 			foreach (AudioFile af in _files.Values)
 			{
 				if (string.IsNullOrEmpty(af.Tag.Album) || af.Directory is null) continue;
-				if (_albumDictionary.TryGetValue(af.Tag.Album, out DirectoryFilenameDictionary? dic))
+
+				if (_albums.TryGetValue(af.Tag.Album, out CatalogTag tag))
 				{
-					dic.Add(new DirectoryFilenameKey((int)af.Directory, af.FileName), af);
+					tag.AddFile(af);
 				}
 				else
 				{
-					DirectoryFilenameDictionary dicn = new();
-					dicn.Add(new DirectoryFilenameKey((int)af.Directory, af.FileName), af);
-					_albumDictionary.Add(af.Tag.Album, dicn);
+					_albums.Add(new CatalogTag(af.Tag.Album, af));
 				}
 			}
 		}
 
-		if(_genreDictionary is null)
+		if(_genres is null)
 		{
-			_genreDictionary = new();
+			_genres = new();
 
 			foreach (AudioFile af in _files.Values)
 			{
 				if (string.IsNullOrEmpty(af.Tag.Genre) || af.Directory is null) continue;
-				if (_genreDictionary.TryGetValue(af.Tag.Genre, out DirectoryFilenameDictionary? dic))
+
+				if (_genres.TryGetValue(af.Tag.Genre, out CatalogTag tag))
 				{
-					dic.Add(new DirectoryFilenameKey((int)af.Directory, af.FileName), af);
+					tag.AddFile(af);
 				}
 				else
 				{
-					DirectoryFilenameDictionary dicn = new();
-					dicn.Add(new DirectoryFilenameKey((int)af.Directory, af.FileName), af);
-					_genreDictionary.Add(af.Tag.Genre, dicn);
+					_genres.Add(new CatalogTag(af.Tag.Genre, af));
 				}
 			}
 		}
@@ -134,13 +121,13 @@ internal class AudioFileCollection : ICollection<AudioFile>
 			_files.Add((int)file.ID, file);
 			_filenameDictionary.Add(new DirectoryFilenameKey((int)file.Directory, file.FileName), file);
 
-			this.ClearTagDictionary();
+			this.ClearTagCollection();
 		}
 	}
 	public void Clear()
 	{
 		_files.Clear();
-		this.ClearTagDictionary();
+		this.ClearTagCollection();
 	}
 	public bool Contains(AudioFile file)
 	{
@@ -165,7 +152,7 @@ internal class AudioFileCollection : ICollection<AudioFile>
 		{
 			_filenameDictionary.Remove(new DirectoryFilenameKey((int)file.Directory, file.FileName));
 			bool ret = _files.Remove((int)file.ID);
-			if (ret) this.ClearTagDictionary();
+			if (ret) this.ClearTagCollection();
 			return ret;
 		}
 		return false;

@@ -57,6 +57,14 @@ public partial class MainWindow : Window
 			{
 				this.WindowState = st;
 			}
+			if(state.PlayingWidth >= 0) _colPlaying.Width = new(state.PlayingWidth, GridUnitType.Pixel);
+			if(state.FileNameWidth >= 0) _colFileName.Width = new(state.FileNameWidth, GridUnitType.Pixel);
+			if(state.ArtistWidth >= 0) _colArtist.Width = new(state.ArtistWidth, GridUnitType.Pixel);
+			if(state.AlbumWidth >= 0) _colAlbum.Width = new(state.AlbumWidth, GridUnitType.Pixel);
+			if(state.TitleWidth >= 0) _colTitle.Width  = new(state.TitleWidth, GridUnitType.Pixel);
+			if(state.TimeWidth >= 0) _colTime.Width = new(state.TimeWidth, GridUnitType.Pixel);
+			if(state.FavoriteWidth >= 0) _colFavorite.Width = new(state.FavoriteWidth, GridUnitType.Pixel);
+
 			_vm?.RestoreState(state);
 		}
 	}
@@ -74,7 +82,16 @@ public partial class MainWindow : Window
 		state.Top = this.Position.Y;
 		state.Width = this.Width;
 		state.Height = this.Height;
+		state.PlayingWidth = _colPlaying.ActualWidth;
+		state.FileNameWidth = _colFileName.ActualWidth;
+		state.ArtistWidth = _colArtist.ActualWidth;
+		state.AlbumWidth = _colAlbum.ActualWidth;
+		state.TitleWidth = _colTitle.ActualWidth;
+		state.TimeWidth = _colTime.ActualWidth;
+		state.FavoriteWidth = _colFavorite.ActualWidth;
+
 		_vm?.SaveState(state);
+
 		ThisState.SaveToFile(state);
 	}
 

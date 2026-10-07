@@ -28,16 +28,16 @@ public partial class MainViewModel : ViewModelBase
 
 		BassStream.Initialize();
 
-		if (ThisApp.Instance.DirectFiles.Count > 0)
-		{
-			this.SetFiles(ThisApp.Instance.DirectFiles);
-			this.PlayCommand.Execute(null);
-		}
-		else
-		{
+		//if (ThisApp.Instance.DirectFiles.Count > 0)
+		//{
+		//	this.SetFiles(ThisApp.Instance.DirectFiles);
+		//	this.PlayCommand.Execute(null);
+		//}
+		//else
+		//{
 			this.ClearFiles();
 			this.ShowPlayState();
-		}
+		//}
 	}
 
 	public void Terminate()
@@ -54,27 +54,43 @@ public partial class MainViewModel : ViewModelBase
 
 	internal void SaveState(ThisState state)
 	{
-		System.Console.WriteLine("SaveState");		// TODO: 削除
+		System.Console.WriteLine("SaveState");      // TODO: 削除
+
+		if (state is null) return;
 
 		// Volume
-		state?.Volume = this.Volume;
+		state.Volume = this.Volume;
 
 		// CatalogList
-		state?.Catalogs.Clear();
+		state.Catalogs?.Clear();
 		foreach (Catalog catalog in this.CatalogList)
 		{
-			state?.Catalogs.Add(catalog.Path);
+			state.Catalogs?.Add(catalog.Path);
 		}
 	}
 
 	internal void RestoreState(ThisState state)
 	{
-		System.Console.WriteLine("RestoreState");		// TODO: 削除
+		System.Console.WriteLine("RestoreState");       // TODO: 削除
+
+		if (state is null) return;
 
 		// Volume
 		this.Volume = state.Volume;
 
-		// TODO:
+		// CatalogList
+		this.CatalogList.Clear();
+		if (state.Catalogs is not null)
+		{
+			for (int i = 1; i < state.Catalogs.Count; i++)
+			{
+				this.CatalogList.Add(Catalog.Open(state.Catalogs[i]));
+			}
+			if (state.Catalogs.Count > 0)
+			{
+				this.OpenCatalog(Catalog.Open(state.Catalogs[0]));
+			}
+		}
 	}
 
 	//========================================
@@ -106,7 +122,8 @@ public partial class MainViewModel : ViewModelBase
 		_catalog = catalog;
 		this.SetFiles(_catalog.AllFiles);
 
-		foreach (string s in _catalog.AllFiles.GetArtists()) System.Console.WriteLine($"artist [{s}]");		// TODO: 削除
+		foreach(CatalogTag t in _catalog.AllFiles.GetArtists())		// TODO: 削除
+			System.Console.WriteLine($"artist [{t.Name}] => [{t.Count}]");
 
 		// リストの先頭に追加
 		this.CatalogList.Insert(0, catalog);

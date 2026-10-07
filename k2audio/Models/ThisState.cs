@@ -20,6 +20,20 @@ internal class ThisState : StateBase
 	public float Volume { get; set; } = 20.0f;
 	[DataMember]
 	public List<string> Catalogs { get; set; } = new();
+	[DataMember]
+	public double PlayingWidth { get; set; } = -1;
+	[DataMember]
+	public double FileNameWidth { get; set; } = -1;
+	[DataMember]
+	public double ArtistWidth { get; set; } = -1;
+	[DataMember]
+	public double AlbumWidth { get; set; } = -1;
+	[DataMember]
+	public double TitleWidth { get; set; } = -1;
+	[DataMember]
+	public double TimeWidth { get; set; } = -1;
+	[DataMember]
+	public double FavoriteWidth { get; set; } = -1;
 
 	//========================================
 	// セーブ・ロード
