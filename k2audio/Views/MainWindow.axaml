@@ -140,13 +140,13 @@
 			<!-- ファイルリスト -->
 			<TableView Grid.Column="2" ItemsSource="{Binding Path=Files}" SelectedIndex="{Binding Path=SelectedIndex}">
 				<TableView.Columns>
-					<TableViewColumn x:Name="_colPlaying" Header="FileName" Width="20" />
+					<!--<TableViewColumn x:Name="_colPlaying" Width="20" />-->
 					<TableViewColumn x:Name="_colFileName" Header="FileName" Binding="{Binding Path=FileName}" Width="200" />
 					<TableViewColumn x:Name="_colArtist" Header="Artist" Binding="{Binding Path=Tag.Artist}" Width="100" />
 					<TableViewColumn x:Name="_colAlbum" Header="Album" Binding="{Binding Path=Tag.Album}" Width="100" />
 					<TableViewColumn x:Name="_colTitle" Header="Title" Binding="{Binding Path=Tag.Title}" Width="100" />
 					<TableViewColumn x:Name="_colTime" Header="Time" Binding="{Binding Path=Tag.Time}" Width="100" />
-					<TableViewColumn x:Name="_colFavorite" Header="Favorite" Width="100" />
+					<!--<TableViewColumn x:Name="_colFavorite" Header="Favorite" Width="100" />-->
 				</TableView.Columns>
 			</TableView>
 		</Grid>

@@ -153,7 +153,7 @@ public partial class MainViewModel : ViewModelBase
 		{
 			list.Add(t);
 
-			System.Console.WriteLine($"artist [{t.Name}] => [{t.Count}]");	// TODO: 削除
+			//System.Console.WriteLine($"artist [{t.Name}] => [{t.Count}]");	// TODO: 削除
 		}
 	}
 
