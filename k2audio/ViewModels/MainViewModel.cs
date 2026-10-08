@@ -122,8 +122,8 @@ public partial class MainViewModel : ViewModelBase
 		_catalog = catalog;
 		this.SetFiles(_catalog.AllFiles);
 
-		foreach(CatalogTag t in _catalog.AllFiles.GetArtists())		// TODO: 削除
-			System.Console.WriteLine($"artist [{t.Name}] => [{t.Count}]");
+		//foreach (CatalogTag t in _catalog.AllFiles.GetArtists())        // TODO: 削除
+		//	System.Console.WriteLine($"artist [{t.Name}] => [{t.Count}]");
 
 		// リストの先頭に追加
 		this.CatalogList.Insert(0, catalog);
@@ -137,10 +137,28 @@ public partial class MainViewModel : ViewModelBase
 				break;
 			}
 		}
+
+		// タグリスト
+		this.SetTagList(this.ArtistList, _catalog.AllFiles.GetArtists());
+		//this.SetTagList(this.AlbumList, _catalog.AllFiles.GetAlbums());
+		//this.SetTagList(this.GenreList, _catalog.AllFiles.GetGenres());
+	}
+
+	private void SetTagList(ObservableCollection<CatalogTag> list, CatalogTagCollection tags)
+	{
+		IList<CatalogTag> tagList = tags.GetTagsByCount(true);
+
+		list.Clear();
+		foreach (CatalogTag t in tagList)
+		{
+			list.Add(t);
+
+			System.Console.WriteLine($"artist [{t.Name}] => [{t.Count}]");	// TODO: 削除
+		}
 	}
 
 	//========================================
-	// リスト
+	// ファイルリスト
 	private void ClearFiles()
 	{
 		this.Files.Clear();
@@ -356,6 +374,9 @@ public partial class MainViewModel : ViewModelBase
 	// プロパティ
 	[ObservableProperty]
 	internal partial string Title { get; private set; } = String.Empty;
+	internal ObservableCollection<CatalogTag> ArtistList { get; } = new();
+	internal ObservableCollection<CatalogTag> AlbumList { get; } = new();
+	internal ObservableCollection<CatalogTag> GenreList { get; } = new();
 	internal ObservableCollection<Catalog> CatalogList { get; } = new();
 	internal ObservableCollection<AudioFile> Files { get; } = new();
 	[ObservableProperty]

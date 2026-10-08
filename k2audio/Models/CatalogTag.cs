@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Common.Collections;
 using k2audio.Models.Audio;
 
 namespace k2audio.Models;
@@ -40,6 +41,22 @@ internal class CatalogTagCollection : ICollection<CatalogTag>//, IDictionary<str
 	// コンストラクタ
 	public CatalogTagCollection()
 	{
+	}
+
+	//========================================
+	// 取得
+	public IList<CatalogTag> GetTagsByCount(bool desc)
+	{
+		List<CatalogTag> list = new(_tags.Values);
+		list.Sort((x, y) =>
+		{
+			int ret = x.Count.CompareTo(y.Count);
+			if (desc) ret *= -1;
+			if (ret == 0) ret = x.Name.CompareTo(y.Name);
+			return ret;
+		});
+
+		return list;
 	}
 
 	//========================================

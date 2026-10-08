@@ -60,7 +60,7 @@ internal class Catalog : IDisposable
 	{
 		get
 		{
-			if (_allFiles is null) _allFiles = GetFiles(null);
+			if (_allFiles is null) _allFiles = this.GetAllFiles();
 			return _allFiles;
 		}
 	}
@@ -300,6 +300,11 @@ internal class Catalog : IDisposable
 		cmd.Parameters.AddWithValue("$dir", id);
 
 		cmd.ExecuteNonQuery();
+	}
+
+	private AudioFileCollection GetAllFiles()
+	{
+		return this.GetFiles(null);
 	}
 
 	private AudioFileCollection GetFiles(int? dirID)

@@ -45,6 +45,26 @@ internal class AudioFileCollection : ICollection<AudioFile>
 			throw new ApplicationException("Artists is null.");
 	}
 
+	internal CatalogTagCollection GetAlbums()
+	{
+		this.MakeTagCollection();
+
+		if (_albums is not null)
+			return _albums;
+		else
+			throw new ApplicationException("Albums is null.");
+	}
+
+	internal CatalogTagCollection GetGenres()
+	{
+		this.MakeTagCollection();
+
+		if (_genres is not null)
+			return _genres;
+		else
+			throw new ApplicationException("Genres is null.");
+	}
+
 	private void ClearTagCollection()
 	{
 		_artists = null;

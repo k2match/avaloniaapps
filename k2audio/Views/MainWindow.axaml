@@ -72,7 +72,7 @@
 			</StackPanel>
 
 			<!-- タグ情報 -->
-			<StackPanel Grid.Row="1" Grid.Column="0"  Orientation="Horizontal">
+			<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
 				<Label Content="{Binding Path=TrackSummary, Mode=OneWay}" />
 			</StackPanel>
 
@@ -98,11 +98,38 @@
 					<RowDefinition Height="200" />
 				</Grid.RowDefinitions>
 
+				<ScrollViewer Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+						VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden">
+					<StackPanel Orientation="Vertical">
+						<Expander HorizontalAlignment="Stretch" Header="アーティスト">
+							<ListBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+									ItemsSource="{Binding Path=ArtistList}" SelectionMode="Single">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+											<TextBlock Text="{Binding Path=Name}" />
+											<TextBlock Text=" (" />
+											<TextBlock Text="{Binding Path=Count}" />
+											<TextBlock Text=")" />
+										</StackPanel>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+						</Expander>
+
+						<Expander HorizontalAlignment="Stretch" Header="アルバム">
+						</Expander>
+
+						<Expander HorizontalAlignment="Stretch" Header="ジャンル">
+						</Expander>
+					</StackPanel>
+				</ScrollViewer>
+
 				<ListBox Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
 						ItemsSource="{Binding Path=CatalogList}" SelectionMode="Single">
 					<ListBox.ItemTemplate>
 						<DataTemplate>
-							<TextBlock Text="{Binding Path=Name}" />
+							<Button Content="{Binding Path=Name}" />
 						</DataTemplate>
 					</ListBox.ItemTemplate>
 				</ListBox>
